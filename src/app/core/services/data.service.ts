@@ -1,24 +1,41 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { Product } from '../models/product';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError, retry, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
 
-  private REST_API_SERVER = environment.apiUrl + '/products';
+  private readonly REST_API_PATH = environment.apiUrl + '/products';
+  public first = '';
+  public prev = '';
+  public next = '';
+  public last = '';
 
   constructor(private httpClient: HttpClient) {
   }
 
-  public sendGetRequest(): Observable<Product[]> {
+  public sendGetRequest(): Observable<HttpResponse<Product[]>> {
+    // Add safe, URL encoded_page parameter
+    // const options = { params: new HttpParams({fromString: '_page=1&_limit=20'}), observe: 'response'};
     // on fail, retries 3 times the httpcall before producing an error
     // TODO: might add some time delay to the retry
-    return this.httpClient.get<Product[]>(this.REST_API_SERVER).pipe(retry(3), catchError(this.handleError));
+    return this.httpClient
+      .get<Product[]>(this.REST_API_PATH, {params: new HttpParams({fromString: '_page=1&_limit=8'}), observe: 'response'})
+      .pipe(retry(3), catchError(this.handleError), tap((res: any) => {
+        this.parseLinkHeader(res.headers.get('Link'));
+      }));
+  }
+
+  // TODO: DRY code
+  public sendGetRequestToUrl(url: string): Observable<HttpResponse<Product[]>> {
+    return this.httpClient.get<Product[]>(url, { observe: 'response'}).pipe(retry(3), catchError(this.handleError), tap(res => {
+      this.parseLinkHeader(res.headers.get('Link'));
+    }));
   }
 
   // TODO: move to HttpClient interceptors
@@ -33,5 +50,25 @@ export class DataService {
     }
     window.alert(errorMessage);
     return throwError(errorMessage);
+  }
+
+  parseLinkHeader(header) {
+    if (header.length === 0) {
+      return;
+    }
+
+    const parts = header.split(',');
+    const links = {};
+    parts.forEach(p => {
+      const section = p.split(';');
+      const url = section[0].replace(/<(.*)>/, '$1').trim();
+      const name = section[1].replace(/rel="(.*)"/, '$1').trim();
+      links[name] = url;
+    });
+
+    this.first = links['first'];
+    this.last = links['last'];
+    this.prev = links['prev'];
+    this.next = links['next'];
   }
 }

@@ -14,7 +14,14 @@ mat-card {
   max-width: 20vw;
 }
 
+.description {
+  height: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis; //TODO: fix because not working with several lines...
+}
+
 img {
+  margin-top: 5px;
   max-width: 100%;
   height: auto;
 }
