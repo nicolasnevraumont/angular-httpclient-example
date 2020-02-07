@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DataService } from '../core/services/data.service';
 import { Product } from '../core/models/product';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
 
@@ -14,19 +14,25 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   products: Product[] = [];
   destroy$: Subject<boolean> = new Subject<boolean>(); // used to unsubscribe from http calls if the component is destroyed (closed)
+  update$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
-    this.dataService.sendGetRequest().pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<Product[]>) => {
-      this.products = res.body;
-    });
+    this.getProducts();
+    this.update$.subscribe((update: boolean) => update === true ? this.getProducts() : '');
   }
 
   ngOnDestroy() {
     this.destroy$.next(true);
     // Unsubscribe from the subject
     this.destroy$.unsubscribe();
+  }
+
+  private getProducts() {
+    this.dataService.sendGetRequest().pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<Product[]>) => {
+      this.products = res.body;
+    });
   }
 
   // TODO: DRY code
@@ -68,7 +74,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public deleteProduct(id: number) {
     if (confirm('Do you really want to delete this product?')) {
-      this.dataService.deleteProduct(id).subscribe(res => console.log(res));
+      this.dataService.deleteProduct(id).subscribe(_ => this.update$.next(true));
     }
   }
 }

@@ -2391,14 +2391,6 @@
       "price": "256.00",
       "imageUrl": "https://source.unsplash.com/1600x900/?product",
       "quantity": 60135
-    },
-    {
-      "id": 300,
-      "name": "Handmade Fresh Soap",
-      "description": "Eligendi culpa consequatur id fugiat culpa sint repellendus. Incidunt id quis consectetur laborum recusandae. Aut et in cum in aliquid reprehenderit.",
-      "price": "912.00",
-      "imageUrl": "https://source.unsplash.com/1600x900/?product",
-      "quantity": 76242
     }
   ]
 }
