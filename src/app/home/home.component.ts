@@ -24,17 +24,22 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      console.log(params);
       this.highlightedProductId = params.get('productId');
     });
     this.getProducts();
-    this.update$.subscribe((update: boolean) => update === true ? this.getProducts() : '');
+    this.update$.subscribe((update: boolean) => update === true ? this.refreshProducts() : '');
   }
 
   ngOnDestroy() {
     this.destroy$.next(true);
     // Unsubscribe from the subject
     this.destroy$.unsubscribe();
+  }
+
+  private refreshProducts() {
+    this.highlightedProductId = ''; // might refresh with productId URL parameter affected to highlightedProductId but in this case
+    // the effect is not wanted
+    this.getProducts();
   }
 
   private getProducts() {
