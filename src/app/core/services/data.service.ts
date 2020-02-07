@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { Product } from '../models/product';
 import { catchError, retry, tap } from 'rxjs/operators';
@@ -10,7 +10,11 @@ import { catchError, retry, tap } from 'rxjs/operators';
 })
 export class DataService {
 
-  private readonly REST_API_PATH = environment.apiUrl + '/products';
+  private readonly REST_API_PRODUCTS_PATH = environment.apiUrl + '/products';
+  private readonly httpOptions = {
+    headers: new HttpHeaders({'Content-Type': 'application/json'})
+  };
+
   public first = '';
   public prev = '';
   public next = '';
@@ -25,7 +29,7 @@ export class DataService {
     // on fail, retries 3 times the httpcall before producing an error
     // TODO: might add some time delay to the retry
     return this.httpClient
-      .get<Product[]>(this.REST_API_PATH, {params: new HttpParams({fromString: '_page=1&_limit=8'}), observe: 'response'})
+      .get<Product[]>(this.REST_API_PRODUCTS_PATH, {params: new HttpParams({fromString: '_page=1&_limit=8'}), observe: 'response'})
       .pipe(retry(3), catchError(this.handleError), tap((res: any) => {
         this.parseLinkHeader(res.headers.get('Link'));
       }));
@@ -37,6 +41,32 @@ export class DataService {
       this.parseLinkHeader(res.headers.get('Link'));
     }));
   }
+
+  public addProduct(product: any): Observable<Product> {
+    return this.httpClient.post<Product>(this.REST_API_PRODUCTS_PATH, product, this.httpOptions).pipe(
+      tap((p: Product) => console.log(`added product w/ id=${p.id}`)),
+      catchError(this.handleError)
+    );
+  }
+
+  /*
+  updateProduct (id, product): Observable<any> {
+    const url = `${apiUrl}/${id}`;
+    return this.http.put(url, product, httpOptions).pipe(
+      tap(_ => console.log(`updated product id=${id}`)),
+      catchError(this.handleError<any>('updateProduct'))
+    );
+  }
+
+  deleteProduct (id): Observable<Product> {
+    const url = `${apiUrl}/${id}`;
+
+    return this.http.delete<Product>(url, httpOptions).pipe(
+      tap(_ => console.log(`deleted product id=${id}`)),
+      catchError(this.handleError<Product>('deleteProduct'))
+    );
+  }
+  */
 
   // TODO: move to HttpClient interceptors
   handleError(error: HttpErrorResponse) {

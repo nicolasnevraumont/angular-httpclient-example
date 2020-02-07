@@ -1,0 +1,37 @@
+<div *ngIf="isLoadingResults">
+  <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+</div>
+<h1>Add product</h1>
+<mat-card class="example-card">
+  <form [formGroup]="productForm" (ngSubmit)="onFormSubmit(productForm.value)">
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Product Name" formControlName="name">
+      <mat-error>
+        <span *ngIf="!productForm.get('name').valid && productForm.get('name').touched">Please enter Product Name</span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Product Desc" formControlName="description">
+      <mat-error>
+        <span *ngIf="!productForm.get('description').valid && productForm.get('description').touched">Please enter Product Description</span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Product Price" formControlName="price">
+      <mat-error>
+        <span
+          *ngIf="!productForm.get('price').valid && productForm.get('price').touched">Please enter Product Price</span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Qauntity" formControlName="quantity">
+      <mat-error>
+        <span *ngIf="!productForm.get('quantity').valid && productForm.get('quantity').touched">Please enter Product Price</span>
+      </mat-error>
+    </mat-form-field>
+    <div class="button-row">
+      <button [routerLink]="['/']" mat-button>Cancel</button>
+      <button type="submit" [disabled]="!productForm.valid" mat-raised-button color="primary">Save</button>
+    </div>
+  </form>
+</mat-card>

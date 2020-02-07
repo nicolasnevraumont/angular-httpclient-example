@@ -7,18 +7,26 @@ import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MatToolbarModule,
+import {
+  MatToolbarModule,
+  MatInputModule,
+  MatPaginatorModule,
+  MatProgressSpinnerModule,
+  MatSortModule,
   MatIconModule,
-  MatCardModule,
   MatButtonModule,
-  MatProgressSpinnerModule } from '@angular/material';
+  MatCardModule,
+  MatFormFieldModule } from '@angular/material';
+import { ProductAddComponent } from './product-add/product-add.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    AboutComponent
+    AboutComponent,
+    ProductAddComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +37,12 @@ import { MatToolbarModule,
     MatIconModule,
     MatButtonModule,
     MatCardModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatFormFieldModule,
+    FormsModule, ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
