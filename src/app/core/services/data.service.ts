@@ -29,7 +29,8 @@ export class DataService {
     // on fail, retries 3 times the httpcall before producing an error
     // TODO: might add some time delay to the retry
     return this.httpClient
-      .get<Product[]>(this.REST_API_PRODUCTS_PATH, {params: new HttpParams({fromString: '_page=1&_limit=8'}), observe: 'response'})
+      .get<Product[]>(this.REST_API_PRODUCTS_PATH,
+        {params: new HttpParams({fromString: '_page=1&_limit=8&_sort=id&_order=desc'}), observe: 'response'})
       .pipe(retry(3), catchError(this.handleError), tap((res: any) => {
         this.parseLinkHeader(res.headers.get('Link'));
       }));
@@ -49,21 +50,21 @@ export class DataService {
     );
   }
 
+  public deleteProduct(id): Observable<any> {
+    const url = `${this.REST_API_PRODUCTS_PATH}/${id}`;
+
+    return this.httpClient.delete<Product>(url, this.httpOptions).pipe(
+      tap(_ => console.log(`deleted product id=${id}`)),
+      catchError(this.handleError)
+    );
+  }
+
   /*
   updateProduct (id, product): Observable<any> {
     const url = `${apiUrl}/${id}`;
     return this.http.put(url, product, httpOptions).pipe(
       tap(_ => console.log(`updated product id=${id}`)),
       catchError(this.handleError<any>('updateProduct'))
-    );
-  }
-
-  deleteProduct (id): Observable<Product> {
-    const url = `${apiUrl}/${id}`;
-
-    return this.http.delete<Product>(url, httpOptions).pipe(
-      tap(_ => console.log(`deleted product id=${id}`)),
-      catchError(this.handleError<Product>('deleteProduct'))
     );
   }
   */

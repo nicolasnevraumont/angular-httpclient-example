@@ -29,7 +29,7 @@ export class ProductAddComponent implements OnInit {
     this.isLoadingResults = true;
     console.log(form);
     this.dataService.addProduct(form)
-      .subscribe(res => {
+      .subscribe(_ => {
         // let id = res['_id'];
         this.isLoadingResults = false;
         this.router.navigate(['']);

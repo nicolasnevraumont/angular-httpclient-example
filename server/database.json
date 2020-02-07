@@ -2399,14 +2399,6 @@
       "price": "912.00",
       "imageUrl": "https://source.unsplash.com/1600x900/?product",
       "quantity": 76242
-    },
-    {
-      "name": "TEst",
-      "description": "sfdsfsdfsdfsdfsd",
-      "price": "4",
-      "imageUrl": "https://source.unsplash.com/1600x900/?product",
-      "quantity": "4",
-      "id": 301
     }
   ]
 }
