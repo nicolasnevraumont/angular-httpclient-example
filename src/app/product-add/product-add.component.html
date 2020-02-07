@@ -1,6 +1,3 @@
-<div *ngIf="isLoadingResults">
-  <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
-</div>
 <h1>Add product</h1>
 <mat-card class="example-card">
   <form [formGroup]="productForm" (ngSubmit)="onFormSubmit(productForm.value)">

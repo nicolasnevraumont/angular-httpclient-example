@@ -1,3 +1,5 @@
+@import './src/styles/variables';
+
 mat-spinner {
   margin: auto;
 }
@@ -6,6 +8,16 @@ mat-spinner {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
+}
+
+@keyframes efade {
+  from { opacity: 0.2 } // background: mat-color($app-accent)
+  to { opacity: 1 }
+}
+
+.new-item {
+  animation-name: efade;
+  animation-duration: 4s;
 }
 
 mat-card {

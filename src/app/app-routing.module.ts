@@ -7,11 +7,12 @@ import { ProductAddComponent } from './product-add/product-add.component';
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
   {path: 'home', component: HomeComponent},
+  {path: 'home/afteradd/:productId', component: HomeComponent},
   {path: 'about', component: AboutComponent},
   {
     path: 'product-add',
     component: ProductAddComponent,
-    data: { title: 'Add Product' }
+    data: {title: 'Add Product'}
   }
 ];
 
