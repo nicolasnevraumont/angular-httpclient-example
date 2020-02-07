@@ -1,7 +1,7 @@
 <div>
   <mat-spinner class="centered" *ngIf="products.length === 0"></mat-spinner>
   <div class="flex-container">
-    <mat-card *ngFor="let product of products">
+    <mat-card *ngFor="let product of products" [class.new-item]="isHighlighted(product.id)"  [class.removed-item]="isRemoved(product.id)">
       <mat-card-header>
         <mat-card-title>{{product.name}}</mat-card-title>
         <mat-card-subtitle>{{product.price}} $ / # {{product.quantity}}

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { DataService } from '../core/services/data.service';
+import { Product } from '../core/models/product';
 
 @Component({
   selector: 'app-product-add',
@@ -29,11 +30,9 @@ export class ProductAddComponent implements OnInit {
     this.isLoadingResults = true;
     console.log(form);
     this.dataService.addProduct(form)
-      .subscribe(_ => {
-        // let id = res['_id'];
+      .subscribe((p: Product) => {
         this.isLoadingResults = false;
-        this.router.navigate(['']);
-        // this.router.navigate(['/product-details', id]);
+        this.router.navigate([`home/afteradd/${p.id}`]);
       }, (err) => {
         console.log(err);
         this.isLoadingResults = false;

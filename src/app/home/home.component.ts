@@ -2,8 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DataService } from '../core/services/data.service';
 import { Product } from '../core/models/product';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { delay, takeUntil } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -15,10 +16,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   destroy$: Subject<boolean> = new Subject<boolean>(); // used to unsubscribe from http calls if the component is destroyed (closed)
   update$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private highlightedProductId = '';
+  private removedProductId = -1;
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private route: ActivatedRoute) {
+  }
 
   ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      console.log(params);
+      this.highlightedProductId = params.get('productId');
+    });
     this.getProducts();
     this.update$.subscribe((update: boolean) => update === true ? this.getProducts() : '');
   }
@@ -35,6 +43,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  public isHighlighted(productId: number) {
+    return this.highlightedProductId === productId.toString();
+  }
+
+  public isRemoved(productId: number) {
+    return this.removedProductId === productId;
+  }
+
   // TODO: DRY code
   // TODO: Make visible or not depending on context (e.g. no prev button on first page...)
   // TODO: Virtual scrolling?
@@ -42,39 +58,43 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.products = [];
     this.dataService.sendGetRequestToUrl(this.dataService.first).pipe(takeUntil(this.destroy$))
       .subscribe((res: HttpResponse<Product[]>) => {
-      this.products = res.body;
-    });
+        this.products = res.body;
+      });
   }
+
   public previousPage() {
     if (this.dataService.prev !== undefined && this.dataService.prev !== '') {
       this.products = [];
       this.dataService.sendGetRequestToUrl(this.dataService.prev).pipe(takeUntil(this.destroy$))
         .subscribe((res: HttpResponse<Product[]>) => {
-        this.products = res.body;
-      });
+          this.products = res.body;
+        });
     }
 
   }
+
   public nextPage() {
     if (this.dataService.next !== undefined && this.dataService.next !== '') {
       this.products = [];
       this.dataService.sendGetRequestToUrl(this.dataService.next).pipe(takeUntil(this.destroy$))
         .subscribe((res: HttpResponse<Product[]>) => {
-        this.products = res.body;
-      });
+          this.products = res.body;
+        });
     }
   }
+
   public lastPage() {
     this.products = [];
     this.dataService.sendGetRequestToUrl(this.dataService.last).pipe(takeUntil(this.destroy$))
       .subscribe((res: HttpResponse<Product[]>) => {
-      this.products = res.body;
-    });
+        this.products = res.body;
+      });
   }
 
   public deleteProduct(id: number) {
     if (confirm('Do you really want to delete this product?')) {
-      this.dataService.deleteProduct(id).subscribe(_ => this.update$.next(true));
+      this.removedProductId = id;
+      this.dataService.deleteProduct(id).pipe(delay(2000)).subscribe(_ => this.update$.next(true));
     }
   }
 }
