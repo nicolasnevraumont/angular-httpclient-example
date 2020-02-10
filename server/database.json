@@ -2383,22 +2383,6 @@
       "price": "355.00",
       "imageUrl": "https://source.unsplash.com/1600x900/?product",
       "quantity": 86819
-    },
-    {
-      "name": "toto",
-      "description": "fdfdsf",
-      "price": "90",
-      "imageUrl": "https://source.unsplash.com/1600x900/?product",
-      "quantity": "90",
-      "id": 303
-    },
-    {
-      "name": "ddqdqs",
-      "description": "dqdqsdsq",
-      "price": "34",
-      "imageUrl": "https://source.unsplash.com/1600x900/?product",
-      "quantity": "88",
-      "id": 304
     }
   ]
 }

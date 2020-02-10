@@ -96,10 +96,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
 
-  public deleteProduct(id: number) {
+  public deleteProduct(product: Product) {
     if (confirm('Do you really want to delete this product?')) {
-      this.removedProductId = id;
-      this.dataService.deleteProduct(id).pipe(delay(2000)).subscribe(_ => this.update$.next(true));
+      this.removedProductId = product.id;
+      this.dataService.deleteProduct(product).pipe(delay(2000)).subscribe(_ => this.update$.next(true));
     }
   }
 }

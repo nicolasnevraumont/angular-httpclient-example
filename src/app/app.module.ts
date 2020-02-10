@@ -19,15 +19,19 @@ import {
   MatIconModule,
   MatButtonModule,
   MatCardModule,
-  MatFormFieldModule } from '@angular/material';
+  MatFormFieldModule,
+  MatSnackBarModule } from '@angular/material';
 import { ProductAddComponent } from './product-add/product-add.component';
+import { ProductViewComponent } from './product-view/product-view.component';
+import { MessageService } from '@services/message.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     AboutComponent,
-    ProductAddComponent
+    ProductAddComponent,
+    ProductViewComponent
   ],
   imports: [
     BrowserModule,
@@ -43,9 +47,10 @@ import { ProductAddComponent } from './product-add/product-add.component';
     MatPaginatorModule,
     MatSortModule,
     MatFormFieldModule,
+    MatSnackBarModule,
     FormsModule, ReactiveFormsModule
   ],
-  providers: [DataService],
+  providers: [DataService, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

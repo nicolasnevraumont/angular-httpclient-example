@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse } 
 import { Observable, throwError } from 'rxjs';
 import { Product } from '@models/product';
 import { catchError, retry, tap } from 'rxjs/operators';
+import { MessageService } from '@services/message.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class DataService {
   public next = '';
   public last = '';
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private messageService: MessageService) {
   }
 
   public sendGetRequest(): Observable<HttpResponse<Product[]>> {
@@ -38,23 +39,31 @@ export class DataService {
 
   // TODO: DRY code
   public sendGetRequestToUrl(url: string): Observable<HttpResponse<Product[]>> {
-    return this.httpClient.get<Product[]>(url, { observe: 'response'}).pipe(retry(3), catchError(this.handleError), tap(res => {
+    return this.httpClient.get<Product[]>(url, {observe: 'response'}).pipe(retry(3), catchError(this.handleError), tap(res => {
       this.parseLinkHeader(res.headers.get('Link'));
     }));
   }
 
-  public addProduct(product: Product): Observable<Product> {
-    return this.httpClient.post<Product>(this.REST_API_PRODUCTS_PATH, product, this.httpOptions).pipe(
-      tap((p: Product) => console.log(`added product w/ id=${p.id}`)),
+  public getProduct(id: number): Observable<Product> {
+    const url = `${this.REST_API_PRODUCTS_PATH}/${id}`;
+
+    return this.httpClient.get<Product>(url, this.httpOptions).pipe(
       catchError(this.handleError)
     );
   }
 
-  public deleteProduct(id): Observable<Product> {
-    const url = `${this.REST_API_PRODUCTS_PATH}/${id}`;
+  public addProduct(product: Product): Observable<Product> {
+    return this.httpClient.post<Product>(this.REST_API_PRODUCTS_PATH, product, this.httpOptions).pipe(
+      tap((p: Product) => this.messageService.add(`The product ${product.name} has been added.`)),
+      catchError(this.handleError)
+    );
+  }
+
+  public deleteProduct(product: Product): Observable<Product> {
+    const url = `${this.REST_API_PRODUCTS_PATH}/${product.id}`;
 
     return this.httpClient.delete<Product>(url, this.httpOptions).pipe(
-      tap(_ => console.log(`deleted product id=${id}`)),
+      tap(_ => this.messageService.add(`The product ${product.name} has been deleted.`)),
       catchError(this.handleError)
     );
   }

@@ -3,7 +3,7 @@
   <div class="flex-container">
     <mat-card *ngFor="let product of products" [class.new-item]="isHighlighted(product.id)"  [class.removed-item]="isRemoved(product.id)">
       <mat-card-header>
-        <mat-card-title>{{product.name}}</mat-card-title>
+        <mat-card-title><a routerLink="/product-view/{{product.id}}">{{product.name}}</a></mat-card-title>
         <mat-card-subtitle>{{product.price}} $ / # {{product.quantity}}
         </mat-card-subtitle>
       </mat-card-header>
@@ -14,7 +14,7 @@
         <img alt="Image representing the product" [src]="product.imageUrl"/>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-button (click)="deleteProduct(product.id)">Delete product</button>
+        <button mat-button (click)="deleteProduct(product)">Delete product</button>
       </mat-card-actions>
     </mat-card>
   </div>
