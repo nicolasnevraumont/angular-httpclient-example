@@ -7,26 +7,26 @@
     <mat-form-field class="example-full-width">
       <input matInput placeholder="Product Name" formControlName="name">
       <mat-error>
-        <span *ngIf="!productForm.get('name').valid && productForm.get('name').touched">Please enter Product Name</span>
+        <span *ngIf="!f.name.valid && f.name.touched">Please enter Product Name</span>
       </mat-error>
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <input matInput placeholder="Product Desc" formControlName="description">
       <mat-error>
-        <span *ngIf="!productForm.get('description').valid && productForm.get('description').touched">Please enter Product Description</span>
+        <span *ngIf="!f.description.valid && f.description.touched">Please enter Product Description</span>
       </mat-error>
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <input matInput placeholder="Product Price" formControlName="price">
       <mat-error>
         <span
-          *ngIf="!productForm.get('price').valid && productForm.get('price').touched">Please enter Product Price</span>
+          *ngIf="!f.price.valid && f.price.touched">Please enter Product Price</span>
       </mat-error>
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Qauntity" formControlName="quantity">
+      <input matInput placeholder="Quantity" formControlName="quantity">
       <mat-error>
-        <span *ngIf="!productForm.get('quantity').valid && productForm.get('quantity').touched">Please enter Product Price</span>
+        <span *ngIf="!f.quantity.valid && f.quantity.touched">Please enter Product Price</span>
       </mat-error>
     </mat-form-field>
     <div class="button-row">

@@ -31,7 +31,7 @@ export class DataService {
     return this.httpClient
       .get<Product[]>(this.REST_API_PRODUCTS_PATH,
         {params: new HttpParams({fromString: '_page=1&_limit=8&_sort=id&_order=desc'}), observe: 'response'})
-      .pipe(retry(3), catchError(this.handleError), tap((res: any) => {
+      .pipe(retry(3), catchError(this.handleError), tap((res: HttpResponse<Product[]>) => {
         this.parseLinkHeader(res.headers.get('Link'));
       }));
   }
@@ -43,14 +43,14 @@ export class DataService {
     }));
   }
 
-  public addProduct(product: any): Observable<Product> {
+  public addProduct(product: Product): Observable<Product> {
     return this.httpClient.post<Product>(this.REST_API_PRODUCTS_PATH, product, this.httpOptions).pipe(
       tap((p: Product) => console.log(`added product w/ id=${p.id}`)),
       catchError(this.handleError)
     );
   }
 
-  public deleteProduct(id): Observable<any> {
+  public deleteProduct(id): Observable<Product> {
     const url = `${this.REST_API_PRODUCTS_PATH}/${id}`;
 
     return this.httpClient.delete<Product>(url, this.httpOptions).pipe(
@@ -58,16 +58,6 @@ export class DataService {
       catchError(this.handleError)
     );
   }
-
-  /*
-  updateProduct (id, product): Observable<any> {
-    const url = `${apiUrl}/${id}`;
-    return this.http.put(url, product, httpOptions).pipe(
-      tap(_ => console.log(`updated product id=${id}`)),
-      catchError(this.handleError<any>('updateProduct'))
-    );
-  }
-  */
 
   // TODO: move to HttpClient interceptors
   handleError(error: HttpErrorResponse) {

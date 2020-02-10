@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DataService } from '@services/data.service';
 import { Product } from '@models/product';
 
@@ -14,7 +14,8 @@ export class ProductAddComponent implements OnInit {
   productForm: FormGroup;
   isLoadingResults = false;
 
-  constructor(private dataService: DataService, private router: Router, private formBuilder: FormBuilder) { }
+  constructor(private dataService: DataService, private router: Router, private formBuilder: FormBuilder) {
+  }
 
   ngOnInit(): void {
     this.productForm = this.formBuilder.group({
@@ -26,10 +27,14 @@ export class ProductAddComponent implements OnInit {
     });
   }
 
-  onFormSubmit(form: NgForm) {
+  // convenience getter for easy access to form fields
+  get f() {
+    return this.productForm.controls;
+  }
+
+  onFormSubmit(value: Partial<Product>) {
     this.isLoadingResults = true;
-    console.log(form);
-    this.dataService.addProduct(form)
+    this.dataService.addProduct(new Product(value))
       .subscribe((p: Product) => {
         this.isLoadingResults = false;
         this.router.navigate([`home/afteradd/${p.id}`]);
