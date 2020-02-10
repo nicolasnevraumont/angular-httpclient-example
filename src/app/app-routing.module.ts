@@ -13,7 +13,8 @@ const routes: Routes = [
     path: 'product-add',
     component: ProductAddComponent,
     data: { title: 'Add Product' }
-  }
+  },
+  { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) }
 ];
 
 @NgModule({
