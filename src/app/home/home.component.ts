@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DataService } from '../core/services/data.service';
-import { Product } from '../core/models/product';
+import { DataService } from '@services/data.service';
+import { Product } from '@models/product';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { delay, takeUntil } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';

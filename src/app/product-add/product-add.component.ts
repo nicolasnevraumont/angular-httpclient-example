@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
-import { DataService } from '../core/services/data.service';
-import { Product } from '../core/models/product';
+import { DataService } from '@services/data.service';
+import { Product } from '@models/product';
 
 @Component({
   selector: 'app-product-add',

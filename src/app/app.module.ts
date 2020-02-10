@@ -8,6 +8,7 @@ import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DataService } from '@services/data.service';
 
 import {
   MatToolbarModule,
@@ -44,7 +45,7 @@ import { ProductAddComponent } from './product-add/product-add.component';
     MatFormFieldModule,
     FormsModule, ReactiveFormsModule
   ],
-  providers: [],
+  providers: [DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
+import { environment } from '@environments/environment';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { Product } from '../models/product';
+import { Product } from '@models/product';
 import { catchError, retry, tap } from 'rxjs/operators';
 
 @Injectable({
